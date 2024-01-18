@@ -1,0 +1,15 @@
+{
+  "name": "seniorproject",
+  "version": "1.0.0",
+  "description": "Senior Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "SeniorProject"
+  },
+  "author": "Henry Johnson",
+  "license": "ISC"
+}
