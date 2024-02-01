@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import supabase from './db.js';
-import tableRoutes from './routes/table.js';
+import tableRoutes from './routes/genTable.js';
 
 const app = express();
 const port = 8000;

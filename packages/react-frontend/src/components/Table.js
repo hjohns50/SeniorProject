@@ -1,35 +1,40 @@
+// react-frontend/src/components/Table.js
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const Table = () => {
+const Table = ({ tableName }) => {
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/genTable/batterBasic') 
-      .then(response => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/genTable/${tableName}`);
+        console.log('Supabase Response:', response.data);
         setTableData(response.data.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching table data:', error);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [tableName]);
 
   return (
     <div>
-      <h2>Your Table</h2>
+      <h2>{tableName} Table</h2>
       <table>
         <thead>
           <tr>
-            {tableData.length > 0 && Object.keys(tableData[0]).map(column => (
-              <th key={column}>{column}</th>
-            ))}
+            {tableData.length > 0 &&
+              Object.keys(tableData[0]).map((column) => <th key={column}>{column}</th>)}
           </tr>
         </thead>
         <tbody>
           {tableData.map((row, index) => (
             <tr key={index}>
-              {Object.values(row).map((cell, cellIndex) => (
-                <td key={cellIndex}>{cell}</td>
+              {Object.keys(row).map((column, cellIndex) => (
+                <td key={cellIndex}>{row[column]}</td>
               ))}
             </tr>
           ))}

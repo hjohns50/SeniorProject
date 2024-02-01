@@ -6,8 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* Other content */}
-        <Table />
+        <Table tableName="batterBasic"/>
       </header>
     </div>
   );

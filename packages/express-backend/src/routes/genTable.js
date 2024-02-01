@@ -1,20 +1,19 @@
-// express-backend/src/routes/table.js
 import express from 'express';
-import supabase from '.././db.js';
+import supabase from '../db.js';
 
 const router = express.Router();
 
-router.get('/genTable/:tableName', async (req, res) => {
+router.get('/:tableName', async (req, res) => {
   try {
     const { tableName } = req.params;
     
-    const result = await supabase.from('batterBasic').select('*').limit(100);
+    let { data: batterBasic, error } = await supabase.from(tableName).select('name, year, batting_avg');
 
-    const columns = Object.keys(result[0]);
+    const columns = Object.keys(batterBasic[0]);
 
     const responseData = {
       columns,
-      data: result,
+      data: batterBasic,
     };
 
     res.json(responseData);
