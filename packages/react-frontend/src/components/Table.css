@@ -1,6 +1,3 @@
-/* Table.css */
-
-/* Basic styling for the table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -22,6 +19,7 @@ table {
   th {
     background-color: #f2f2f2;
     font-weight: bold;
+    cursor: pointer; /* Add cursor pointer to indicate sortable columns */
   }
   
   /* Hover effect on rows */
@@ -36,3 +34,11 @@ table {
     }
   }
   
+  /* Sorting indicators */
+  th.desc::after {
+    content: ' ↓';
+  }
+  
+  th.asc::after {
+    content: ' ↑';
+  }

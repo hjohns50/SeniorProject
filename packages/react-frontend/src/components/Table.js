@@ -1,20 +1,21 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import { useTable } from 'react-table';
+import { useTable, useSortBy, usePagination } from 'react-table';
 import './Table.css';
 import { columnMappings, tableMappings } from '../columnMappings';
 
 const Table = ({ tableName }) => {
   const [tableData, setTableData] = useState([]);
   const tableColumnMapping = columnMappings[tableName] || {};
-  
+
   const columns = useMemo(() => {
     if (tableData.length > 0) {
       return Object.keys(tableData[0])
-        .filter(key => key !== 'player_id') // Exclude 'player_id'
+        .filter(key => key !== 'player_id')
         .map(key => ({
           Header: tableColumnMapping[key] || key,
           accessor: key,
+          sortDescFirst: true
         }));
     }
     return [];
@@ -43,25 +44,41 @@ const Table = ({ tableName }) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page, // Instead of 'rows', we'll use 'page'
     prepareRow,
-  } = useTable({ columns, data: tableData });
+    state: { pageIndex, pageSize },
+    gotoPage,
+    previousPage,
+    canPreviousPage,
+    nextPage,
+    canNextPage,
+    pageCount,
+  } = useTable(
+    { columns, data: tableData, initialState: { pageSize: 25 } },
+    useSortBy,
+    usePagination
+  );
 
   return (
     <div>
       <h2>{tableMappings[tableName] || tableName}</h2>
-      <table {...getTableProps()}>
+      <table {...getTableProps()} className="styled-table">
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className={column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : ''}
+                >
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
+          {page.map(row => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
@@ -73,6 +90,26 @@ const Table = ({ tableName }) => {
           })}
         </tbody>
       </table>
+      <div>
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {Math.ceil(tableData.length / pageSize)}
+          </strong>{' '}
+        </span>
+        <button onClick={() => gotoPage(0)} disabled={pageIndex === 0}>
+          {'<<'}
+        </button>{' '}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={pageIndex === pageCount - 1}>
+          {'>>'}
+        </button>{' '}
+      </div>
     </div>
   );
 };
