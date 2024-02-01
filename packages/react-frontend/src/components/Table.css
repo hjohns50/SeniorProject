@@ -1,0 +1,38 @@
+/* Table.css */
+
+/* Basic styling for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f2f2f2;
+    overflow-x: auto; /* Enable horizontal scrolling on small screens */
+  }
+  
+  /* Styling for table headers */
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 12px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  /* Hover effect on rows */
+  tr:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Responsive styling for small screens */
+  @media screen and (max-width: 600px) {
+    th, td {
+      padding: 8px;
+    }
+  }
+  

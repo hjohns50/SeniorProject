@@ -7,13 +7,13 @@ router.get('/:tableName', async (req, res) => {
   try {
     const { tableName } = req.params;
     
-    let { data: batterBasic, error } = await supabase.from(tableName).select('name, year, batting_avg');
+    let { data: table, error } = await supabase.from(tableName).select('*');
 
-    const columns = Object.keys(batterBasic[0]);
+    const columns = Object.keys(table[0]);
 
     const responseData = {
       columns,
-      data: batterBasic,
+      data: table,
     };
 
     res.json(responseData);
