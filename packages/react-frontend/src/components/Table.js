@@ -44,7 +44,7 @@ const Table = ({ tableName }) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page, // Instead of 'rows', we'll use 'page'
+    page,
     prepareRow,
     state: { pageIndex, pageSize },
     gotoPage,
