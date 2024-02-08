@@ -2,7 +2,9 @@
 
 const columnMappings = {
     batterBasic: {
-        name: 'Name (Last, First)',
+        Player: 'Player',
+        Team: 'Team',
+        Position: 'Position',
         year: 'Year',
         player_age: 'Age',
         ab: 'AB',
@@ -21,11 +23,37 @@ const columnMappings = {
         b_rbi: 'RBI',
         r_total_stolen_base: 'SB',
         b_hit_by_pitch: 'HBP'
-    }
+    },
+    batterStatcast: {
+      Player: 'Player',
+      Team: 'Team',
+      Position: 'Position',
+      year: 'Year',
+      player_age: 'Age',
+      k_percent: 'K%',
+      bb_percent: 'BB%',
+      xba: 'xBA',
+      xslg: 'xSLG',
+      woba: 'wOBA',
+      xwoba: 'xWOBA',
+      xobp: 'xOBP',
+      xiso: 'xISO',
+      exit_velocity_avg: 'Avg EV',
+      launch_angle_avg: 'Avg LA',
+      sweet_spot_percent: 'Sweet Spot%',
+      barrel_batted_rate: 'Barrel Rate',
+      hard_hit_percent: 'Hard Hit%',
+      avg_best_speed: 'Avg Best Speed',
+      avg_hyper_speed: 'Avg Hyper Speed',
+      whiff_percent: 'Whiff%',
+      swing_percent: 'Swing%'
+
+  }
   };
   
   const tableMappings = {
     batterBasic: 'Basic Batting Stats',
+    batterStatcast: 'Statcast Batting Stats'
   };
   
   export { columnMappings, tableMappings };
