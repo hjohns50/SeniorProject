@@ -1,0 +1,48 @@
+.table-header {
+    position: relative;
+  }
+  
+  .dropdown-toggle {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f2f2f2;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid #ccc;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f2f2f2;
+    column-count: 4;
+    column-gap: 10px;
+    width: 100%;
+  }
+  
+  .dropdown-item {
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #ddd;
+  }
+  
+  .selected {
+    font-weight: bold;
+  }
+  
+  .check-mark {
+    color: green;
+  }
+  

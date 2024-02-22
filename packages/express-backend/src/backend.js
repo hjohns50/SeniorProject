@@ -14,7 +14,7 @@ app.use('/genTable', tableRoutes);
 (async () => {
     try {
       const { data, error } = await supabase
-        .from('batterBasic')
+        .from('batter')
         .select('player_id')
         .limit(1);
   

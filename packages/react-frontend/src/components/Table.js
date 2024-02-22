@@ -3,21 +3,23 @@ import axios from 'axios';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import './Table.css';
 import { columnMappings, tableMappings } from '../columnMappings';
+import TableHeader from './TableHeader';
 
 const Table = ({ tableName }) => {
   const [tableData, setTableData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [selectedColumns, setSelectedColumns] = useState(['Player', 'year', 'Team', 'Position', 'player_age']);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/genTable/${tableName}`);
         console.log('Supabase Response:', response.data);
-  
+
         if (response.data && response.data.data) {
           setTableData(response.data.data);
+
           
-          // Log the size of the response payload
           console.log('Response Size:', JSON.stringify(response.data).length);
         } else {
           console.error('Data is null or undefined.');
@@ -26,12 +28,17 @@ const Table = ({ tableName }) => {
         console.error('Error fetching table data:', error);
       }
     };
-  
+
     fetchData();
   }, [tableName]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleUpdateColumns = () => {
+    console.log("Selected Columns:", selectedColumns);
+    setIsDropdownOpen(false); // Close dropdown when updating columns
   };
 
   const filteredData = useMemo(() => {
@@ -44,10 +51,12 @@ const Table = ({ tableName }) => {
 
   const columns = useMemo(() => {
     const tableColumnMapping = columnMappings[tableName] || {};
-  
+
     if (tableData.length > 0) {
       return Object.keys(tableData[0])
         .filter(key => key !== 'player_id')
+        .filter(key => !['player_id'].includes(key))
+        .filter(key => selectedColumns.includes(key))
         .map(key => ({
           Header: tableColumnMapping[key] || key,
           accessor: key,
@@ -55,18 +64,18 @@ const Table = ({ tableName }) => {
           sortType: (rowA, rowB, columnId) => {
             const valueA = rowA.values[columnId];
             const valueB = rowB.values[columnId];
-  
+
             const isNumeric = !isNaN(parseFloat(valueA)) && !isNaN(parseFloat(valueB));
             if (isNumeric) {
               return parseFloat(valueA) - parseFloat(valueB);
             }
-  
+
             return valueA.localeCompare(valueB);
           }
         }));
     }
     return [];
-  }, [tableData, tableName]);
+  }, [tableData, tableName, selectedColumns]);
 
   const {
     getTableProps,
@@ -96,6 +105,15 @@ const Table = ({ tableName }) => {
         value={searchQuery}
         onChange={handleSearchChange}
       />
+      <TableHeader
+        selectedColumns={selectedColumns}
+        setSelectedColumns={setSelectedColumns}
+        columnMappings={columnMappings}
+        tableName={tableName}
+        isDropdownOpen={isDropdownOpen}
+        setIsDropdownOpen={setIsDropdownOpen}
+      />
+      <button onClick={handleUpdateColumns}>Update Columns</button>
       <table {...getTableProps()} className="styled-table">
         <thead>
           {headerGroups.map(headerGroup => (
