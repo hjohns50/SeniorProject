@@ -13,7 +13,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <button onClick={() => handleTableToggle("batter")}>Batters</button>
-        {/* Add more buttons or a dropdown menu for additional tables */}
+        <button onClick={() => handleTableToggle("pitcher")}>Pitchers</button>
 
         <Table tableName={currentTable}/>
       </header>

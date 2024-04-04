@@ -6,10 +6,12 @@ import { columnMappings, tableMappings } from '../columnMappings';
 import TableHeader from './TableHeader';
 
 const Table = ({ tableName }) => {
+  const [originalTableData, setOriginalTableData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedColumns, setSelectedColumns] = useState(['Player', 'year', 'Team', 'Position', 'player_age']);
+  const [selectedColumns, setSelectedColumns] = useState(['Player', 'year', 'Team', 'Position', 'player_age', 'batting_avg', 'b_rbi', 'hit', 'home_run']);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,9 +19,9 @@ const Table = ({ tableName }) => {
         console.log('Supabase Response:', response.data);
 
         if (response.data && response.data.data) {
+          setOriginalTableData(response.data.data);
           setTableData(response.data.data);
 
-          
           console.log('Response Size:', JSON.stringify(response.data).length);
         } else {
           console.error('Data is null or undefined.');
@@ -38,7 +40,12 @@ const Table = ({ tableName }) => {
 
   const handleUpdateColumns = () => {
     console.log("Selected Columns:", selectedColumns);
-    setIsDropdownOpen(false); // Close dropdown when updating columns
+    setIsDropdownOpen(false); 
+  };
+
+  const clearFilter = () => {
+    setTableData(originalTableData); 
+    setSearchQuery(''); 
   };
 
   const filteredData = useMemo(() => {
@@ -112,8 +119,11 @@ const Table = ({ tableName }) => {
         tableName={tableName}
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
+        tableData={tableData}
+        updateTableData={setTableData}
+        originalTableData={originalTableData}
+        clearFilter={clearFilter}
       />
-      <button onClick={handleUpdateColumns}>Update Columns</button>
       <table {...getTableProps()} className="styled-table">
         <thead>
           {headerGroups.map(headerGroup => (

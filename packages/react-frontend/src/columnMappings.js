@@ -1,5 +1,3 @@
-// react-frontend/src/columnMappings.js
-
 const columnMappings = {
   batterBasic: {
       Player: 'Player',
@@ -48,15 +46,60 @@ const columnMappings = {
       whiff_percent: 'Whiff%',
       swing_percent: 'Swing%'
   },
-  batter: {}
+  batter: {},
+  pitcher: {
+      Player: 'Player',
+      Team: 'Team',
+      Position: 'Position',
+      year: 'Year',
+      player_age: 'Age',
+      p_game: 'Games',
+      p_formatted_ip: 'IP',
+      pa: 'PA',
+      ab: 'AB',
+      hit: 'Hits',
+      single: 'Singles',
+      double: 'Doubles',
+      triples: 'Triples',
+      home_run: 'HR',
+      strikeout: 'SO',
+      walks: 'Walks',
+      k_percent: 'K%',
+      bb_percent: 'BB%',
+      batting_avg: 'BA',
+      slg_percent: 'SLG',
+      on_base_percent: 'OBP',
+      on_base_plus_slg: 'OPS',
+      p_earned_run: 'ER',
+      p_win: 'W',
+      p_loss: 'L',
+      p_era: 'ERA',
+      p_quality_start: 'QS',
+      xba: 'xBA',
+      xslg: 'xSLG',
+      woba: 'WOBA',
+      xwoba: 'xWOBA',
+      bacon: 'BACON',
+      xbacon: 'xBACON',
+      exit_velocity_avg: 'Avg EV',
+      launch_angle_avg: 'Avg LA',
+      barrel_batted_rate: 'Barrel Rate',
+      avg_hyper_speed: 'Avg Hyper Speed',
+      z_swing_percent: 'Swing %',
+      z_swing_percent: 'Miss %',
+      z_swing_percent: 'Out of Zone Swing %',
+      oz_swing_miss_percent: 'Out of Zone Miss %',
+      out_zone_percent: 'Out of Zone %'
+  }
 };
 
-Object.assign(columnMappings.batter, columnMappings.batterBasic, columnMappings.batterStatcast);
+Object.assign(columnMappings.batter, columnMappings.batterBasic, columnMappings.batterStatcast, columnMappings.pitcher);
 
   const tableMappings = {
     batterBasic: 'Basic Batting Stats',
     batterStatcast: 'Statcast Batting Stats',
-    batter: 'Batting Stats'
+    batter: 'Batting Stats',
+    pitcher: 'Pitcher Stats'
   };
   
   export { columnMappings, tableMappings };

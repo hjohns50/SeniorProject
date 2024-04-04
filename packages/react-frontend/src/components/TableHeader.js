@@ -1,7 +1,10 @@
-import React from 'react';
-import './TableHeader.css'
+import React, { useState } from 'react';
+import './TableHeader.css';
+import Filter from './Filter';
 
-const TableHeader = ({ selectedColumns, setSelectedColumns, columnMappings, tableName, isDropdownOpen, setIsDropdownOpen }) => {
+const TableHeader = ({ selectedColumns, setSelectedColumns, columnMappings, tableName, isDropdownOpen, setIsDropdownOpen, tableData, updateTableData, clearFilter }) => {
+    const [filters, setFilters] = useState([]);
+
     const toggleColumnSelection = (columnKey) => {
       if (selectedColumns.includes(columnKey)) {
         setSelectedColumns(selectedColumns.filter(col => col !== columnKey));
@@ -9,8 +12,29 @@ const TableHeader = ({ selectedColumns, setSelectedColumns, columnMappings, tabl
         setSelectedColumns([...selectedColumns, columnKey]);
       }
     };
-  
-    const columnKeys = Object.keys(columnMappings[tableName]).filter(key => !['column_to_exclude_1', 'column_to_exclude_2'].includes(key));
+
+    const applyFilter = (selectedStat, filterType, numericValue) => {
+      return tableData.filter(row => {
+        const rowValue = row[selectedStat];
+        if (filterType === 'less') {
+          return rowValue < numericValue;
+        } else {
+          return rowValue > numericValue;
+        }
+      });
+    };
+    
+    const handleAddFilter = () => {
+      setFilters([...filters, {}]);
+    };
+
+    const handleClearFilter = (index) => {
+      clearFilter();
+      const remainingFilters = filters.filter((_, i) => i !== index);
+      setFilters(remainingFilters);
+    };
+
+    const columnKeys = Object.keys(columnMappings[tableName] || {}).filter(key => !['column_to_exclude_1', 'column_to_exclude_2'].includes(key));
   
     const numColumns = 4;
     const numItemsPerColumn = Math.ceil(columnKeys.length / numColumns);
@@ -21,7 +45,6 @@ const TableHeader = ({ selectedColumns, setSelectedColumns, columnMappings, tabl
   
     return (
       <div>
-        {/* Dropdown menu to select column */}
         <div className="table-header">
           <div
             className="dropdown-toggle"
@@ -39,7 +62,7 @@ const TableHeader = ({ selectedColumns, setSelectedColumns, columnMappings, tabl
                       onMouseDown={() => toggleColumnSelection(columnKey)}
                       className={selectedColumns.includes(columnKey) ? 'dropdown-item selected' : 'dropdown-item'}
                     >
-                      {columnMappings[tableName][columnKey] || columnKey}
+                      {columnMappings[tableName] && columnMappings[tableName][columnKey] ? columnMappings[tableName][columnKey] : columnKey}
                       {selectedColumns.includes(columnKey) && <span className="check-mark">&#10003;</span>}
                     </div>
                   ))}
@@ -47,9 +70,29 @@ const TableHeader = ({ selectedColumns, setSelectedColumns, columnMappings, tabl
               ))}
             </div>
           )}
+          <button onClick={handleAddFilter}>Add Filter</button>
+          {filters.map((filter, index) => (
+            <Filter
+              key={index}
+              statistics={columnKeys}
+              applyFilter={(selectedStat, filterType, numericValue) => {
+                const filteredData = tableData.filter(row => {
+                  const rowValue = row[selectedStat];
+                  if (filterType === 'less') {
+                    return rowValue < numericValue;
+                  } else {
+                    return rowValue > numericValue;
+                  }
+                });
+                updateTableData(filteredData);
+              }}
+              clearFilter={() => handleClearFilter(index)}
+              columnMappings={columnMappings}
+            />
+          ))}
         </div>
       </div>
     );
-  };
-  
-  export default TableHeader;
+};
+
+export default TableHeader;
