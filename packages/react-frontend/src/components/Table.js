@@ -9,7 +9,7 @@ const Table = ({ tableName }) => {
   const [originalTableData, setOriginalTableData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedColumns, setSelectedColumns] = useState(['Player', 'year', 'Team', 'Position', 'player_age', 'batting_avg', 'b_rbi', 'hit', 'home_run']);
+  const [selectedColumns, setSelectedColumns] = useState(['Player', 'year', 'Team', 'Pos', 'player_age', 'batting_avg', 'b_rbi', 'hit', 'home_run']);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
