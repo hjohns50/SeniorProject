@@ -4,7 +4,6 @@ const ColumnSelect = ({ selectedColumns, toggleColumnSelection, columnMappings, 
   return (
     <div>
       {Object.keys(columnMappings[tableName] || {}).map(columnKey => (
-        !['column_to_exclude_1', 'column_to_exclude_2'].includes(columnKey) &&
         <label key={columnKey}>
           <input
             type="checkbox"

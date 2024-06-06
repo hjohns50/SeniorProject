@@ -5,12 +5,13 @@ import './Table.css';
 import { columnMappings, tableMappings } from '../columnMappings';
 import TableHeader from './TableHeader';
 
-const Table = ({ tableName }) => {
+const Table = ({ tableName, onSelectPlayer }) => {
   const [originalTableData, setOriginalTableData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedColumns, setSelectedColumns] = useState(['Player', 'year', 'Team', 'Pos', 'player_age', 'batting_avg', 'b_rbi', 'hit', 'home_run']);
+  const [selectedColumns, setSelectedColumns] = useState(['Player', 'year', 'Team', 'Pos', 'player_age', 'batting_avg', 'b_rbi', 'hit', 'home_run', 'composite_hit_metric', 'composite_pitcher_metric']);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,6 +79,12 @@ const Table = ({ tableName }) => {
             }
 
             return valueA.localeCompare(valueB);
+          },
+          Cell: ({ value }) => {
+            if (typeof value === 'number' && value % 1 !== 0) {
+              return value.toFixed(3); 
+            }
+            return value;
           }
         }));
     }
@@ -98,10 +105,15 @@ const Table = ({ tableName }) => {
     canNextPage,
     pageCount,
   } = useTable(
-    { columns, data: filteredData, initialState: { pageSize: 25 } },
+    { columns, data: filteredData, initialState: { pageSize: 15 } },
     useSortBy,
     usePagination
   );
+
+  const handleRowClick = (row) => {
+    setSelectedRow(row);
+    onSelectPlayer(row.original); 
+  };
 
   return (
     <div>
@@ -143,7 +155,13 @@ const Table = ({ tableName }) => {
           {page.map(row => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr
+                {...row.getRowProps()}
+                onClick={() => handleRowClick(row)}
+                style={{
+                  backgroundColor: selectedRow === row ? '#f0f0f0' : 'white',
+                }}
+              >
                 {row.cells.map(cell => (
                   <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                 ))}
